@@ -3,496 +3,226 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Abhinanth M S - Portfolio</title>
+    <title>High-Impact UI Project</title>
     <style>
-        * {
+        /*
+         * 1. STYLES FOR THE IMMERSIVE, NO-TOP-BAR UI
+         */
+        body {
+            /* * DEVELOPER: Implement the chosen **OPTIMAL, NON-PINK COLOR SCHEME** here. 
+             * Use a deep background (e.g., Charcoal or Indigo) and a contrasting accent color (e.g., Cyan or Gold).
+             */
+            background-color: #1a1a2e; /* Example: Deep Indigo */
+            color: #ffffff;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
+            overflow: hidden; /* Hide scrollbars for the immersive feel */
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #0a0a1a 0%, #1a0a2e 50%, #0a0a1a 100%);
-            color: #fff;
-            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between; /* Pushes content and footer apart */
+            min-height: 100vh;
         }
 
-        canvas {
-            position: fixed;
+        /* Top bar is intentionally omitted as per the mandate */
+
+        /* * 2. STYLES FOR THE MAIN CONTENT AREA (WHERE THE GRAPHIC GOES)
+         */
+        .main-content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: 50px 20px;
+        }
+
+        /* Placeholder for the High-Quality Graphic */
+        .high-quality-graphic {
+            /* * DEVELOPER: Replace this placeholder with the **STATE-OF-THE-ART GRAPHIC**.
+             * This could be a canvas rendering, a complex 3D viewer (e.g., WebGL/Three.js), or a high-fidelity image/animation.
+             */
+            width: 80%;
+            max-width: 600px;
+            height: 300px;
+            background-color: #39a797; /* Example: Teal placeholder */
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            text-align: center;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            margin-bottom: 50px;
+        }
+
+        /* * 3. STYLES FOR THE SUSPENSE BUTTON AND CRACKERS ANIMATION 
+         */
+        .suspense-button {
+            /* DEVELOPER: Use the ACCENT COLOR for the button */
+            background-color: #ffcc00; /* Example: Gold Accent */
+            color: #1a1a2e;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.5em;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            position: relative;
+            z-index: 10;
+            box-shadow: 0 8px 0 #ccaa00; /* Shadow for 3D press effect */
+        }
+
+        .suspense-button:active {
+            box-shadow: 0 2px 0 #ccaa00;
+            transform: translateY(6px);
+            /* DEVELOPER: Add the visual "charge" effect here (e.g., button pulsing) */
+        }
+
+        .crackers-animation {
+            /* DEVELOPER: This container will hold the dynamic "crackers go up" animation (e.g., particles) */
+            position: absolute;
             top: 0;
             left: 0;
-            z-index: 0;
-        }
-
-        .content {
-            position: relative;
-            z-index: 1;
-        }
-
-        nav {
-            position: fixed;
             width: 100%;
-            top: 0;
-            padding: 25px 50px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: rgba(10, 10, 26, 0.85);
-            backdrop-filter: blur(15px);
-            z-index: 100;
-            border-bottom: 1px solid rgba(138, 43, 226, 0.3);
+            height: 100%;
+            pointer-events: none;
+            z-index: 5;
         }
 
-        .logo {
-            font-size: 24px;
-            color: #ff6b9d;
-            font-weight: bold;
-            letter-spacing: 2px;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 40px;
-            list-style: none;
-        }
-
-        .nav-links a {
-            color: #c8b6ff;
-            text-decoration: none;
-            transition: all 0.3s;
-            font-size: 16px;
-            position: relative;
-        }
-
-        .nav-links a:hover {
-            color: #ff6b9d;
-        }
-
-        .nav-links a::before {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 50%;
-            width: 0;
-            height: 2px;
-            background: #ff6b9d;
-            transition: all 0.3s;
-            transform: translateX(-50%);
-        }
-
-        .nav-links a:hover::before {
+        /*
+         * 4. STYLES FOR THE MOVING COPYRIGHT TEXT
+         */
+        .footer-marquee {
             width: 100%;
+            padding: 5px 0;
+            background-color: rgba(0, 0, 0, 0.3);
+            white-space: nowrap;
+            overflow: hidden;
+            box-sizing: border-box;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            /* DEVELOPER: Use the ACCENT COLOR for the text */
+            color: #ffcc00; 
+            font-size: 0.9em;
         }
 
-        .clock {
-            position: absolute;
-            top: 110px;
-            right: 50px;
-            text-align: right;
-            padding: 15px 30px;
-            border: 2px solid rgba(138, 43, 226, 0.4);
-            border-radius: 15px;
-            background: rgba(26, 10, 46, 0.6);
-            box-shadow: 0 8px 32px rgba(138, 43, 226, 0.2);
-        }
-
-        .time {
-            font-size: 32px;
-            color: #ff6b9d;
-            margin-bottom: 8px;
-            font-weight: bold;
-        }
-
-        .date {
-            font-size: 13px;
-            color: #c8b6ff;
-            letter-spacing: 1px;
-        }
-
-        .hero {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 120px 20px;
-        }
-
-        .hero h1 {
-            font-size: 72px;
-            margin-bottom: 25px;
-            background: linear-gradient(135deg, #ff6b9d, #c44569, #8a2be2);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            animation: glow 3s ease-in-out infinite;
-        }
-
-        @keyframes glow {
-            0%, 100% { filter: drop-shadow(0 0 20px rgba(255, 107, 157, 0.5)); }
-            50% { filter: drop-shadow(0 0 30px rgba(138, 43, 226, 0.8)); }
-        }
-
-        .hero p {
-            font-size: 22px;
-            color: #c8b6ff;
-            margin-bottom: 35px;
-            max-width: 700px;
-            line-height: 1.6;
-        }
-
-        .btn {
-            padding: 18px 50px;
-            background: linear-gradient(135deg, #ff6b9d, #8a2be2);
-            border: none;
-            color: #fff;
-            border-radius: 50px;
-            cursor: pointer;
-            font-size: 18px;
-            text-decoration: none;
+        .marquee-content {
             display: inline-block;
-            transition: all 0.3s;
-            box-shadow: 0 10px 30px rgba(138, 43, 226, 0.4);
-            font-weight: 600;
+            padding-left: 100%; /* Start off-screen */
+            animation: marquee 25s linear infinite; /* Adjust speed as needed */
         }
 
-        .btn:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 40px rgba(138, 43, 226, 0.6);
+        @keyframes marquee {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(-100%, 0); }
         }
 
-        .about {
-            min-height: 100vh;
-            padding: 100px 20px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .about-content {
-            max-width: 900px;
-            text-align: center;
-            line-height: 1.9;
-            font-size: 19px;
-            color: #c8b6ff;
-        }
-
-        .about-content p {
-            margin-bottom: 25px;
-        }
-
-        .section-title {
-            font-size: 52px;
-            background: linear-gradient(135deg, #ff6b9d, #8a2be2);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 60px;
-            text-align: center;
+        /* * STYLES FOR THE GLITCH MONOSPACE FONT ON "ABHINANTH"
+         */
+        .dev-name {
+            /* DEVELOPER: Use a clean, modern monospace font */
+            font-family: 'Courier New', Courier, monospace;
             font-weight: bold;
+            margin: 0 10px;
+            /* DEVELOPER: Implement the **SUBTLE, HIGH-QUALITY GLITCH/ANIMATION EFFECT** here! */
+            text-shadow: 1px 1px 0 #ff00ff, -1px -1px 0 #00ffff; /* Simple Glitch effect placeholder */
+            animation: simple-glitch 4s infinite alternate;
         }
 
-        .info-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 35px;
-            margin-top: 60px;
-            max-width: 1100px;
-        }
-
-        .info-card {
-            padding: 40px;
-            background: rgba(26, 10, 46, 0.5);
-            border: 2px solid rgba(138, 43, 226, 0.3);
-            border-radius: 20px;
-            text-align: center;
-            transition: all 0.4s;
-        }
-
-        .info-card:hover {
-            transform: translateY(-10px);
-            border-color: #ff6b9d;
-            box-shadow: 0 15px 40px rgba(138, 43, 226, 0.4);
-        }
-
-        .info-card h3 {
-            color: #ff6b9d;
-            margin-bottom: 20px;
-            font-size: 26px;
-        }
-
-        .info-card p {
-            color: #c8b6ff;
-            line-height: 1.7;
-        }
-
-        .contact-section {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 100px 20px;
-        }
-
-        .contact-icons {
-            display: flex;
-            gap: 50px;
-            margin-top: 60px;
-        }
-
-        .contact-icon {
-            width: 90px;
-            height: 90px;
-            border: 3px solid #8a2be2;
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 36px;
-            transition: all 0.4s;
-            cursor: pointer;
-            text-decoration: none;
-            background: rgba(26, 10, 46, 0.5);
-            transform: rotate(45deg);
-        }
-
-        .contact-icon svg {
-            width: 45px;
-            height: 45px;
-            fill: #c8b6ff;
-            transition: fill 0.3s;
-            transform: rotate(-45deg);
-        }
-
-        .contact-icon:hover {
-            background: linear-gradient(135deg, #ff6b9d, #8a2be2);
-            transform: rotate(45deg) scale(1.15);
-            box-shadow: 0 10px 30px rgba(138, 43, 226, 0.6);
-        }
-
-        .contact-icon:hover svg {
-            fill: #fff;
-        }
-
-        audio {
-            display: none;
-        }
-
-        @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 48px;
-            }
-            .nav-links {
-                gap: 20px;
-            }
-            .contact-icons {
-                gap: 30px;
-            }
-            .contact-icon {
-                width: 70px;
-                height: 70px;
-                font-size: 28px;
-            }
-            .clock {
-                right: 20px;
-                top: 90px;
-            }
+        @keyframes simple-glitch {
+            0% { transform: skewX(0deg); }
+            50% { transform: skewX(2deg); }
+            100% { transform: skewX(-1deg); }
         }
     </style>
 </head>
 <body>
-    <canvas id="canvas"></canvas>
-    
-    <div class="content">
-        <nav>
-            <div class="logo">ABHINANTH</div>
-            <ul class="nav-links">
-                <li><a href="#home">Home</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="#contact">Contact</a></li>
-            </ul>
-        </nav>
 
-        <div class="clock">
-            <div class="time" id="time"></div>
-            <div class="date" id="date"></div>
+    <div class="main-content">
+        <div class="high-quality-graphic">
+            [ Placeholder: Replace with State-of-the-Art Graphic/3D Model ]
         </div>
 
-        <section id="home" class="hero">
-            <h1>Abhinanth M S</h1>
-            <p>Instrumentation Engineering Student | Developer with a Creative Mind</p>
-            <p>Transforming ideas into elegant digital solutions through innovative code and creative problem-solving</p>
-            <button class="btn" id="journeyBtn">Discover My Journey</button>
-        </section>
+        <button id="suspenseButton" class="suspense-button">
+            PRESS FOR SUSPENSE
+        </button>
 
-        <section id="about" class="about">
-            <h2 class="section-title">About Me</h2>
-            <div class="about-content">
-                <p>Hi! I'm Abhinanth M S, currently studying Instrumentation Engineering. This fascinating field combines electronics, control systems, and computer science to design and maintain measurement and control devices. Instrumentation engineers work on systems that measure temperature, pressure, flow, and other variables, playing crucial roles in industries from manufacturing to aerospace.</p>
-                
-                <p>Based in Palakkad, Kerala, India, I'm passionate about exploring new programming languages, coding innovative solutions, and continuously expanding my technical knowledge.</p>
-            </div>
-
-            <div class="info-grid">
-                <div class="info-card">
-                    <h3>📍 Location</h3>
-                    <p>Palakkad, Kerala, India</p>
-                </div>
-                <div class="info-card">
-                    <h3>🎓 Education</h3>
-                    <p>Instrumentation Engineering</p>
-                </div>
-                <div class="info-card">
-                    <h3>💻 Hobbies</h3>
-                    <p>Learning New Languages<br>Coding & Development<br>Technology Exploration</p>
-                </div>
-            </div>
-        </section>
-
-        <section id="contact" class="contact-section">
-            <h2 class="section-title">Get In Touch</h2>
-            <p style="color: #c8b6ff; font-size: 20px;">Connect with me on social platforms</p>
-            
-            <div class="contact-icons">
-                <a href="https://wa.me/918078454082" target="_blank" class="contact-icon" title="WhatsApp">
-                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
-                    </svg>
-                </a>
-                <a href="https://www.instagram.com/abhe.nandh" target="_blank" class="contact-icon" title="Instagram">
-                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M12 0C8.74 0 8.333.015 7.053.072 5.775.132 4.905.333 4.14.63c-.789.306-1.459.717-2.126 1.384S.935 3.35.63 4.14C.333 4.905.131 5.775.072 7.053.012 8.333 0 8.74 0 12s.015 3.667.072 4.947c.06 1.277.261 2.148.558 2.913.306.788.717 1.459 1.384 2.126.667.666 1.336 1.079 2.126 1.384.766.296 1.636.499 2.913.558C8.333 23.988 8.74 24 12 24s3.667-.015 4.947-.072c1.277-.06 2.148-.262 2.913-.558.788-.306 1.459-.718 2.126-1.384.666-.667 1.079-1.335 1.384-2.126.296-.765.499-1.636.558-2.913.06-1.28.072-1.687.072-4.947s-.015-3.667-.072-4.947c-.06-1.277-.262-2.149-.558-2.913-.306-.789-.718-1.459-1.384-2.126C21.319 1.347 20.651.935 19.86.63c-.765-.297-1.636-.499-2.913-.558C15.667.012 15.26 0 12 0zm0 2.16c3.203 0 3.585.016 4.85.071 1.17.055 1.805.249 2.227.415.562.217.96.477 1.382.896.419.42.679.819.896 1.381.164.422.36 1.057.413 2.227.057 1.266.07 1.646.07 4.85s-.015 3.585-.074 4.85c-.061 1.17-.256 1.805-.421 2.227-.224.562-.479.96-.899 1.382-.419.419-.824.679-1.38.896-.42.164-1.065.36-2.235.413-1.274.057-1.649.07-4.859.07-3.211 0-3.586-.015-4.859-.074-1.171-.061-1.816-.256-2.236-.421-.569-.224-.96-.479-1.379-.899-.421-.419-.69-.824-.9-1.38-.165-.42-.359-1.065-.42-2.235-.045-1.26-.061-1.649-.061-4.844 0-3.196.016-3.586.061-4.861.061-1.17.255-1.814.42-2.234.21-.57.479-.96.9-1.381.419-.419.81-.689 1.379-.898.42-.166 1.051-.361 2.221-.421 1.275-.045 1.65-.06 4.859-.06l.045.03zm0 3.678c-3.405 0-6.162 2.76-6.162 6.162 0 3.405 2.76 6.162 6.162 6.162 3.405 0 6.162-2.76 6.162-6.162 0-3.405-2.76-6.162-6.162-6.162zM12 16c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zm7.846-10.405c0 .795-.646 1.44-1.44 1.44-.795 0-1.44-.646-1.44-1.44 0-.794.646-1.439 1.44-1.439.793-.001 1.44.645 1.44 1.439z"/>
-                    </svg>
-                </a>
-                <a href="https://github.com/COD-LUCAS" target="_blank" class="contact-icon" title="GitHub">
-                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/>
-                    </svg>
-                </a>
-            </div>
-        </section>
+        <div id="crackersContainer" class="crackers-animation"></div>
     </div>
 
-    <audio id="bgMusic" loop>
-        <source src="https://github.com/COD-LUCAS/COD-LUCAS/raw/main/Marshmello%20-%20Alone%20(Official%20Music%20Video).mp3" type="audio/mpeg">
-    </audio>
+    <div class="footer-marquee">
+        <div class="marquee-content">
+            &nbsp;—&nbsp; **Copyright 2025** &nbsp;—&nbsp; **DEVELOPED BY** <span class="dev-name">ABHINANTH</span> &nbsp;—&nbsp; 
+            **Copyright 2025** &nbsp;—&nbsp; **DEVELOPED BY** <span class="dev-name">ABHINANTH</span> &nbsp;—&nbsp;
+            **Copyright 2025** &nbsp;—&nbsp; **DEVELOPED BY** <span class="dev-name">ABHINANTH</span> &nbsp;—&nbsp;
+        </div>
+    </div>
 
     <script>
-        // Geometric Wave Animation
-        const canvas = document.getElementById('canvas');
-        const ctx = canvas.getContext('2d');
-        
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
+        //
+        // JAVASCRIPT FOR INTERACTION AND HAPTICS
+        //
 
-        let cubes = [];
-        const cubeCount = 40;
+        const button = document.getElementById('suspenseButton');
+        const crackersContainer = document.getElementById('crackersContainer');
+        let pressTimer = null;
+        let pressDuration = 0;
 
-        class Cube {
-            constructor() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 40 + 20;
-                this.speedX = (Math.random() - 0.5) * 1.5;
-                this.speedY = (Math.random() - 0.5) * 1.5;
-                this.rotation = Math.random() * Math.PI * 2;
-                this.rotationSpeed = (Math.random() - 0.5) * 0.02;
-                this.opacity = Math.random() * 0.3 + 0.1;
+        // Function to simulate haptic feedback (works on some mobile browsers)
+        function triggerHapticFeedback(duration) {
+            if (navigator.vibrate) {
+                // DEVELOPER: Implement **INTENSIFYING HAPTIC FEEDBACK** here.
+                // Example: Short pulses that get closer together or stronger the longer the button is held.
+                navigator.vibrate(duration > 1500 ? [200, 50] : 100); 
             }
+        }
 
-            update() {
-                this.x += this.speedX;
-                this.y += this.speedY;
-                this.rotation += this.rotationSpeed;
+        // Function to trigger the visual payoff
+        function triggerCrackersAnimation() {
+            // DEVELOPER: Implement the **DRAMATIC "CRACKERS GO UP" ANIMATION** here (e.g., using particle libraries or CSS animations).
+            console.log('--- CRACKERS GO UP ANIMATION TRIGGERED! ---');
+            alert('CRACKERS GO UP ANIMATION triggered! (Replace this alert with the actual visual effect)');
+        }
 
-                if (this.x < -this.size || this.x > canvas.width + this.size) {
-                    this.speedX *= -1;
-                }
-                if (this.y < -this.size || this.y > canvas.height + this.size) {
-                    this.speedY *= -1;
-                }
+        // 1. Button Press START
+        button.addEventListener('mousedown', startPress);
+        button.addEventListener('touchstart', startPress);
+
+        function startPress(e) {
+            e.preventDefault(); 
+            pressDuration = 0;
+
+            if (!pressTimer) {
+                pressTimer = setInterval(() => {
+                    pressDuration += 100; // Increment every 100ms
+                    triggerHapticFeedback(pressDuration);
+                    console.log('Button pressed for:', pressDuration + 'ms');
+                }, 100);
             }
+        }
 
-            draw() {
-                ctx.save();
-                ctx.translate(this.x, this.y);
-                ctx.rotate(this.rotation);
+        // 2. Button Press END (Mouseup or Touchend)
+        button.addEventListener('mouseup', endPress);
+        button.addEventListener('touchend', endPress);
+        button.addEventListener('mouseleave', endPress); // To handle mouse drag off the button
+
+        function endPress() {
+            if (pressTimer) {
+                clearInterval(pressTimer);
+                pressTimer = null;
                 
-                const gradient = ctx.createLinearGradient(-this.size/2, -this.size/2, this.size/2, this.size/2);
-                gradient.addColorStop(0, `rgba(255, 107, 157, ${this.opacity})`);
-                gradient.addColorStop(1, `rgba(138, 43, 226, ${this.opacity})`);
-                
-                ctx.strokeStyle = gradient;
-                ctx.lineWidth = 2;
-                ctx.strokeRect(-this.size/2, -this.size/2, this.size, this.size);
-                
-                ctx.restore();
-            }
-        }
-
-        for (let i = 0; i < cubeCount; i++) {
-            cubes.push(new Cube());
-        }
-
-        function animate() {
-            ctx.fillStyle = 'rgba(10, 10, 26, 0.05)';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-            cubes.forEach(cube => {
-                cube.update();
-                cube.draw();
-            });
-
-            requestAnimationFrame(animate);
-        }
-
-        animate();
-
-        window.addEventListener('resize', () => {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        });
-
-        // Clock
-        function updateClock() {
-            const now = new Date();
-            const time = now.toLocaleTimeString('en-US', { hour12: true });
-            const date = now.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-            
-            document.getElementById('time').textContent = time;
-            document.getElementById('date').textContent = date;
-        }
-
-        updateClock();
-        setInterval(updateClock, 1000);
-
-        // Music control
-        const audio = document.getElementById('bgMusic');
-        const journeyBtn = document.getElementById('journeyBtn');
-        let musicPlaying = false;
-
-        journeyBtn.addEventListener('click', () => {
-            if (!musicPlaying) {
-                audio.play();
-                musicPlaying = true;
-            }
-            document.querySelector('#about').scrollIntoView({ behavior: 'smooth' });
-        });
-
-        // Smooth scrolling
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({ behavior: 'smooth' });
+                // Trigger payoff if pressed long enough (e.g., over 1 second)
+                if (pressDuration > 1000) { 
+                    triggerCrackersAnimation();
+                } else {
+                    console.log('Press too short for full effect.');
                 }
-            });
-        });
+                pressDuration = 0;
+            }
+        }
     </script>
 </body>
 </html>
