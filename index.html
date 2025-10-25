@@ -3,31 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>High-Impact UI Project</title>
+    <title>High-Impact UI Project (Cyber-Glass)</title>
     <style>
-        /*
-         * 1. STYLES FOR THE IMMERSIVE, NO-TOP-BAR UI
+        /* * 1. CYBER-GLASS BASE STYLES & NO-TOP-BAR UI 
          */
+        :root {
+            /* Define Non-Pink, High-Contrast Colors */
+            --bg-color: #0d0d1a; /* Very Dark Blue/Black */
+            --accent-color: #00ffff; /* Electric Cyan */
+            --accent-glow: 0 0 10px #00ffff, 0 0 20px #00ffff;
+            --button-color: #ffc400; /* Gold/Yellow Accent */
+        }
+
         body {
-            /* * DEVELOPER: Implement the chosen **OPTIMAL, NON-PINK COLOR SCHEME** here. 
-             * Use a deep background (e.g., Charcoal or Indigo) and a contrasting accent color (e.g., Cyan or Gold).
-             */
-            background-color: #1a1a2e; /* Example: Deep Indigo */
-            color: #ffffff;
+            background-color: var(--bg-color);
+            color: #f0f0f0; /* Off-white for body text */
             margin: 0;
             padding: 0;
-            overflow: hidden; /* Hide scrollbars for the immersive feel */
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden; 
+            font-family: 'Poppins', sans-serif; /* Modern, clean font */
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: space-between; /* Pushes content and footer apart */
+            justify-content: space-between; 
             min-height: 100vh;
+            position: relative; /* Context for the background mesh */
         }
 
-        /* Top bar is intentionally omitted as per the mandate */
+        /* * NETWORK MESH BACKGROUND (Mimics the Example Sites)
+         * DEVELOPER: This should be replaced with a dynamic particle/mesh JS library for best effect. 
+         */
+        .network-mesh-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0.5;
+            background: 
+                radial-gradient(circle at 10% 10%, rgba(0, 255, 255, 0.2) 1px, transparent 0), 
+                radial-gradient(circle at 50% 50%, rgba(0, 255, 255, 0.2) 1px, transparent 0),
+                radial-gradient(circle at 90% 90%, rgba(0, 255, 255, 0.2) 1px, transparent 0);
+            background-size: 20px 20px;
+            /* Placeholder for the complex line connections shown in the image examples */
+        }
 
-        /* * 2. STYLES FOR THE MAIN CONTENT AREA (WHERE THE GRAPHIC GOES)
+        /* * MAIN CONTENT CONTAINER - Creates the "Glassy" Effect 
          */
         .main-content {
             flex-grow: 1;
@@ -35,35 +58,53 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            width: 90%;
+            max-width: 800px;
+            padding: 40px 20px;
+            z-index: 2; /* Ensure content is above the mesh */
+        }
+        
+        /* The Actual Glass Panel behind the content */
+        .glass-panel {
+            /* DEVELOPER: Apply Glassmorphism properties */
+            background: rgba(255, 255, 255, 0.05); /* Very light background */
+            backdrop-filter: blur(10px); /* The KEY to the glassy look */
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 15px;
+            border: 1px solid rgba(0, 255, 255, 0.3); /* Cyan border glow */
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5), 0 0 15px var(--accent-color);
+            padding: 30px;
             width: 100%;
-            padding: 50px 20px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
-        /* Placeholder for the High-Quality Graphic */
+        /* * 2. HIGH-QUALITY GRAPHIC CONTAINER 
+         */
         .high-quality-graphic {
-            /* * DEVELOPER: Replace this placeholder with the **STATE-OF-THE-ART GRAPHIC**.
-             * This could be a canvas rendering, a complex 3D viewer (e.g., WebGL/Three.js), or a high-fidelity image/animation.
+            /* * DEVELOPER: Replace this with the STATE-OF-THE-ART GRAPHIC. 
+             * Note the CYBER GLOW applied to the container.
              */
-            width: 80%;
-            max-width: 600px;
-            height: 300px;
-            background-color: #39a797; /* Example: Teal placeholder */
+            width: 100%;
+            height: 250px;
+            background-color: var(--accent-color); /* Placeholder: Cyan background */
             border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 1.5em;
             text-align: center;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-            margin-bottom: 50px;
+            margin-bottom: 40px;
+            box-shadow: var(--accent-glow); 
         }
 
-        /* * 3. STYLES FOR THE SUSPENSE BUTTON AND CRACKERS ANIMATION 
+        /* * 3. SUSPENSE BUTTON 
          */
         .suspense-button {
-            /* DEVELOPER: Use the ACCENT COLOR for the button */
-            background-color: #ffcc00; /* Example: Gold Accent */
-            color: #1a1a2e;
+            background-color: var(--button-color); 
+            color: var(--bg-color);
             border: none;
             padding: 15px 40px;
             font-size: 1.5em;
@@ -73,46 +114,34 @@
             transition: all 0.2s ease-in-out;
             position: relative;
             z-index: 10;
-            box-shadow: 0 8px 0 #ccaa00; /* Shadow for 3D press effect */
+            box-shadow: 0 8px 0 #cc9900; 
         }
 
         .suspense-button:active {
-            box-shadow: 0 2px 0 #ccaa00;
+            box-shadow: 0 2px 0 #cc9900;
             transform: translateY(6px);
-            /* DEVELOPER: Add the visual "charge" effect here (e.g., button pulsing) */
+            /* DEVELOPER: Add the visual "charge" effect here */
         }
 
-        .crackers-animation {
-            /* DEVELOPER: This container will hold the dynamic "crackers go up" animation (e.g., particles) */
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 5;
-        }
-
-        /*
-         * 4. STYLES FOR THE MOVING COPYRIGHT TEXT
+        /* * 4. MOVING COPYRIGHT TEXT 
          */
         .footer-marquee {
             width: 100%;
             padding: 5px 0;
-            background-color: rgba(0, 0, 0, 0.3);
+            background-color: rgba(0, 0, 0, 0.5);
             white-space: nowrap;
             overflow: hidden;
             box-sizing: border-box;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            /* DEVELOPER: Use the ACCENT COLOR for the text */
-            color: #ffcc00; 
+            border-top: 1px solid rgba(0, 255, 255, 0.3);
+            color: var(--accent-color); 
             font-size: 0.9em;
+            z-index: 2;
         }
 
         .marquee-content {
             display: inline-block;
-            padding-left: 100%; /* Start off-screen */
-            animation: marquee 25s linear infinite; /* Adjust speed as needed */
+            padding-left: 100%;
+            animation: marquee 25s linear infinite;
         }
 
         @keyframes marquee {
@@ -120,101 +149,94 @@
             100% { transform: translate(-100%, 0); }
         }
 
-        /* * STYLES FOR THE GLITCH MONOSPACE FONT ON "ABHINANTH"
+        /* * GLITCH MONOSPACE FONT ON "ABHINANTH"
          */
         .dev-name {
-            /* DEVELOPER: Use a clean, modern monospace font */
             font-family: 'Courier New', Courier, monospace;
             font-weight: bold;
             margin: 0 10px;
-            /* DEVELOPER: Implement the **SUBTLE, HIGH-QUALITY GLITCH/ANIMATION EFFECT** here! */
-            text-shadow: 1px 1px 0 #ff00ff, -1px -1px 0 #00ffff; /* Simple Glitch effect placeholder */
-            animation: simple-glitch 4s infinite alternate;
+            color: var(--button-color); /* Use gold for better contrast on cyan background */
+            text-shadow: 1px 1px 0 #ff00ff, -1px -1px 0 #00ffff; /* Simple Glitch placeholder */
+            animation: subtle-glitch 4s infinite alternate;
         }
 
-        @keyframes simple-glitch {
-            0% { transform: skewX(0deg); }
-            50% { transform: skewX(2deg); }
-            100% { transform: skewX(-1deg); }
+        @keyframes subtle-glitch {
+            0% { transform: skewX(0deg); opacity: 1;}
+            50% { transform: skewX(1deg); opacity: 0.95;}
+            100% { transform: skewX(-1deg); opacity: 1;}
         }
     </style>
 </head>
 <body>
 
+    <div class="network-mesh-bg"></div>
+
     <div class="main-content">
-        <div class="high-quality-graphic">
-            [ Placeholder: Replace with State-of-the-Art Graphic/3D Model ]
+        <div class="glass-panel">
+            <div class="high-quality-graphic">
+                [ Placeholder: Replace with State-of-the-Art Graphic/3D Model ]
+            </div>
+
+            <button id="suspenseButton" class="suspense-button">
+                PRESS FOR SUSPENSE
+            </button>
         </div>
-
-        <button id="suspenseButton" class="suspense-button">
-            PRESS FOR SUSPENSE
-        </button>
-
         <div id="crackersContainer" class="crackers-animation"></div>
     </div>
 
     <div class="footer-marquee">
         <div class="marquee-content">
             &nbsp;—&nbsp; **Copyright 2025** &nbsp;—&nbsp; **DEVELOPED BY** <span class="dev-name">ABHINANTH</span> &nbsp;—&nbsp; 
-            **Copyright 2025** &nbsp;—&nbsp; **DEVELOPED BY** <span class="dev-name">ABHINANTH</span> &nbsp;—&nbsp;
-            **Copyright 2025** &nbsp;—&nbsp; **DEVELOPED BY** <span class="dev-name">ABHINANTH</span> &nbsp;—&nbsp;
+            &nbsp;—&nbsp; **Copyright 2025** &nbsp;—&nbsp; **DEVELOPED BY** <span class="dev-name">ABHINANTH</span> &nbsp;—&nbsp;
         </div>
     </div>
 
     <script>
-        //
-        // JAVASCRIPT FOR INTERACTION AND HAPTICS
-        //
-
+        // JAVASCRIPT FOR INTERACTION AND HAPTICS (Code is unchanged from previous response, 
+        // as the logic remains the same—only the visuals changed)
         const button = document.getElementById('suspenseButton');
         const crackersContainer = document.getElementById('crackersContainer');
         let pressTimer = null;
         let pressDuration = 0;
 
-        // Function to simulate haptic feedback (works on some mobile browsers)
         function triggerHapticFeedback(duration) {
             if (navigator.vibrate) {
                 // DEVELOPER: Implement **INTENSIFYING HAPTIC FEEDBACK** here.
-                // Example: Short pulses that get closer together or stronger the longer the button is held.
                 navigator.vibrate(duration > 1500 ? [200, 50] : 100); 
             }
         }
 
-        // Function to trigger the visual payoff
         function triggerCrackersAnimation() {
-            // DEVELOPER: Implement the **DRAMATIC "CRACKERS GO UP" ANIMATION** here (e.g., using particle libraries or CSS animations).
+            // DEVELOPER: Implement the **DRAMATIC "CRACKERS GO UP" ANIMATION** here.
             console.log('--- CRACKERS GO UP ANIMATION TRIGGERED! ---');
             alert('CRACKERS GO UP ANIMATION triggered! (Replace this alert with the actual visual effect)');
         }
 
-        // 1. Button Press START
+        // Button Press START
         button.addEventListener('mousedown', startPress);
         button.addEventListener('touchstart', startPress);
 
         function startPress(e) {
             e.preventDefault(); 
             pressDuration = 0;
-
             if (!pressTimer) {
                 pressTimer = setInterval(() => {
-                    pressDuration += 100; // Increment every 100ms
+                    pressDuration += 100;
                     triggerHapticFeedback(pressDuration);
                     console.log('Button pressed for:', pressDuration + 'ms');
                 }, 100);
             }
         }
 
-        // 2. Button Press END (Mouseup or Touchend)
+        // Button Press END
         button.addEventListener('mouseup', endPress);
         button.addEventListener('touchend', endPress);
-        button.addEventListener('mouseleave', endPress); // To handle mouse drag off the button
+        button.addEventListener('mouseleave', endPress);
 
         function endPress() {
             if (pressTimer) {
                 clearInterval(pressTimer);
                 pressTimer = null;
-                
-                // Trigger payoff if pressed long enough (e.g., over 1 second)
                 if (pressDuration > 1000) { 
                     triggerCrackersAnimation();
                 } else {
