@@ -65,16 +65,8 @@ npx serve
 ## Project Structure
 
 ```
-portfolio-website/
-│
-├── index.html          # Main page
-├── css/
-│   └── style.css      # Styles
-├── js/
-│   └── script.js      # JavaScript
-├── assets/
-│   └── images/        # Images
-└── README.md          # Documentation
+├── index.html
+├── README.md
 ```
 
 ## Customization
@@ -104,6 +96,9 @@ MIT License - Free to use and modify
 - GitHub: [@COD-LUCAS](https://github.com/COD-LUCAS)
 - Telegram: [@codlucas](https://t.me/codlucas)
 
+---
+
+Built with 💻 and deployed on Render
 ---
 
 Built with 💻 and deployed on Render
