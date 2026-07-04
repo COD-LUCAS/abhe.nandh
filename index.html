@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <title>Abhinanth MS | Jujutsu Kaisen Portfolio</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          fontFamily: {
+            jjk: ['Rajdhani', 'system-ui', 'sans-serif'],
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+          },
+          keyframes: {
+            "fade-up": { "0%": { opacity: "0", transform: "translateY(12px)" }, "100%": { opacity: "1", transform: "translateY(0)" } },
+            "fade-up-delayed": { "0%": { opacity: "0", transform: "translateY(16px)" }, "100%": { opacity: "1", transform: "translateY(0)" } },
+            "boot-blink": { "0%,100%": { opacity: "1" }, "50%": { opacity: "0" } },
+            "spin-slow": { "0%": { transform: "rotate(0deg)" }, "100%": { transform: "rotate(360deg)" } },
+          },
+          animation: {
+            "fade-up": "fade-up 0.6s ease-out forwards",
+            "fade-up-delayed": "fade-up-delayed 0.8s ease-out forwards",
+            "boot-blink": "boot-blink 1s steps(2,end) infinite",
+            "spin-slow": "spin-slow 10s linear infinite",
+          },
+        },
+      },
+    };
+  </script>
+  <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <style>
+    html { scroll-behavior: smooth; }
+    body { font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    .writing-mode-vertical { writing-mode: vertical-rl; text-orientation: mixed; }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 transition-colors duration-300">
+  <div id="root"></div>
+  <script type="text/babel">
+    const { useState, useEffect, useRef } = React;
+
+    const getAge = () => {
+      const birthYear = 2005;
+      const now = new Date();
+      const hasHadBirthdayThisYear = now.getMonth() > 0 || (now.getMonth() === 0 && now.getDate() >= 24);
+      return now.getFullYear() - birthYear - (hasHadBirthdayThisYear ? 0 : 1);
+    };
+
+    const projects = [
+      {
+        title: "X-OPTIMUS",
+        subtitle: "Jujutsu Kaisen Model Website",
+        description: "X-OPTIMUS is a fast, smart, and customizable Telegram userbot built for automation, plugins, AI tools, and powerful control — making your Telegram experience stronger and easier..",
+        link: "https://github.com/COD-LUCAS/X-OPTIMUS",
+        tags: ["React", "Tailwind CSS", "Anime UI"],
+      },
+      {
+        title: "X-MEGATRON",
+        subtitle: "WhatsApp Multi-Function Bot",
+        description: "X-MEGATRON is a powerful WhatsApp bot built with Node.js and Baileys, featuring group protection (antilink, antispam, antibadword, antifake, antidelete), welcome/goodbye/promote/demote handlers, a sticker bond system, hot-reload plugin architecture, and utility tools like eval and Spotify downloader.",
+        link: "https://github.com/COD-LUCAS/X-MEGATRON",
+        tags: ["Node.js", "Baileys", "WhatsApp Bot"],
+      },
+    ];
+
+    const skills = ["React.js", "JavaScript (ES6+)", "Tailwind CSS", "Responsive Design", "Git & GitHub", "Basic UI/UX"];
+
+    const SectionDivider = ({ label }) => (
+      <div className="relative my-16 flex items-center justify-center">
+        <div className="h-px w-full bg-gradient-to-r from-transparent via-sky-500/80 to-transparent dark:via-purple-500/80" />
+        <div className="absolute inline-flex items-center justify-center rounded-full border border-sky-400/70 bg-slate-900/90 px-4 py-1 text-[10px] font-semibold uppercase tracking-[0.3em] text-sky-300 shadow-lg dark:border-purple-400/70 dark:text-purple-200">
+          呪術 • {label}
+        </div>
+      </div>
+    );
+
+    const Tag = ({ children }) => (
+      <span className="rounded-full border border-sky-400/60 bg-sky-500/10 px-3 py-1 text-xs font-medium text-sky-200 dark:border-purple-400/60 dark:bg-purple-500/10 dark:text-purple-100">
+        {children}
+      </span>
+    );
+
+    const AnimatedNetworkBackground = () => {
+      const canvasRef = useRef(null);
+      const mouseRef = useRef({ x: null, y: null });
+      const touchRef = useRef({ x: null, y: null });
+      const isMobileRef = useRef(false);
+
+      useEffect(() => {
+        const canvas = canvasRef.current;
+        if (!canvas) return;
+        const ctx = canvas.getContext("2d");
+        let width = (canvas.width = window.innerWidth);
+        let height = (canvas.height = window.innerHeight);
+        let animationFrameId;
+
+        isMobileRef.current = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth < 768;
+        const particleCount = isMobileRef.current ? 40 : 70;
+        const maxDistance = isMobileRef.current ? 120 : 140;
+        const mouseRadius = isMobileRef.current ? 120 : 180;
+
+        const particles = Array.from({ length: particleCount }, () => ({
+          x: Math.random() * width,
+          y: Math.random() * height,
+          vx: (Math.random() - 0.5) * 0.4,
+          vy: (Math.random() - 0.5) * 0.4,
+          baseX: 0,
+          baseY: 0,
+        }));
+
+        particles.forEach(p => { p.baseX = p.x; p.baseY = p.y; });
+
+        const resize = () => {
+          width = canvas.width = window.innerWidth;
+          height = canvas.height = window.innerHeight;
+          isMobileRef.current = window.innerWidth < 768;
+        };
+
+        const handleMouseMove = (e) => {
+          if (!isMobileRef.current) {
+            mouseRef.current.x = e.clientX;
+            mouseRef.current.y = e.clientY;
+          }
+        };
+
+        const handleMouseLeave = () => { mouseRef.current.x = null; mouseRef.current.y = null; };
+
+        const handleTouchStart = (e) => {
+          if (isMobileRef.current && e.touches.length > 0) {
+            touchRef.current.x = e.touches[0].clientX;
+            touchRef.current.y = e.touches[0].clientY;
+          }
+        };
+
+        const handleTouchMove = (e) => {
+          if (isMobileRef.current && e.touches.length > 0) {
+            touchRef.current.x = e.touches[0].clientX;
+            touchRef.current.y = e.touches[0].clientY;
+          }
+        };
+
+        const handleTouchEnd = () => { touchRef.current.x = null; touchRef.current.y = null; };
+
+        window.addEventListener("resize", resize);
+        window.addEventListener("mousemove", handleMouseMove);
+        window.addEventListener("mouseleave", handleMouseLeave);
+        canvas.addEventListener("touchstart", handleTouchStart, { passive: true });
+        canvas.addEventListener("touchmove", handleTouchMove, { passive: true });
+        canvas.addEventListener("touchend", handleTouchEnd);
+        canvas.addEventListener("touchcancel", handleTouchEnd);
+
+        const draw = () => {
+          ctx.clearRect(0, 0, width, height);
+          const interactionX = isMobileRef.current ? touchRef.current.x : mouseRef.current.x;
+          const interactionY = isMobileRef.current ? touchRef.current.y : mouseRef.current.y;
+
+          for (let p of particles) {
+            p.baseX += p.vx;
+            p.baseY += p.vy;
+            if (p.baseX < 0 || p.baseX > width) p.vx *= -1;
+            if (p.baseY < 0 || p.baseY > height) p.vy *= -1;
+
+            if (interactionX !== null && interactionY !== null) {
+              const dx = interactionX - p.baseX;
+              const dy = interactionY - p.baseY;
+              const distance = Math.sqrt(dx * dx + dy * dy);
+              if (distance < mouseRadius) {
+                const force = (mouseRadius - distance) / mouseRadius;
+                const angle = Math.atan2(dy, dx);
+                const pushStrength = isMobileRef.current ? 30 : 40;
+                p.x = p.baseX - Math.cos(angle) * force * pushStrength;
+                p.y = p.baseY - Math.sin(angle) * force * pushStrength;
+              } else {
+                p.x += (p.baseX - p.x) * 0.05;
+                p.y += (p.baseY - p.y) * 0.05;
+              }
+            } else {
+              p.x += (p.baseX - p.x) * 0.05;
+              p.y += (p.baseY - p.y) * 0.05;
+            }
+          }
+
+          for (let i = 0; i < particleCount; i++) {
+            const p1 = particles[i];
+            ctx.beginPath();
+            ctx.arc(p1.x, p1.y, isMobileRef.current ? 1.2 : 1.4, 0, Math.PI * 2);
+            ctx.fillStyle = "rgba(56,189,248,0.8)";
+            ctx.fill();
+
+            for (let j = i + 1; j < particleCount; j++) {
+              const p2 = particles[j];
+              const dx = p1.x - p2.x;
+              const dy = p1.y - p2.y;
+              const dist = Math.sqrt(dx * dx + dy * dy);
+              if (dist < maxDistance) {
+                const alpha = 1 - dist / maxDistance;
+                ctx.beginPath();
+                ctx.moveTo(p1.x, p1.y);
+                ctx.lineTo(p2.x, p2.y);
+                ctx.strokeStyle = `rgba(56,189,248,${0.18 * alpha})`;
+                ctx.lineWidth = 0.8;
+                ctx.stroke();
+              }
+            }
+          }
+        };
+
+        const loop = () => {
+          draw();
+          animationFrameId = requestAnimationFrame(loop);
+        };
+        loop();
+
+        return () => {
+          cancelAnimationFrame(animationFrameId);
+          window.removeEventListener("resize", resize);
+          window.removeEventListener("mousemove", handleMouseMove);
+          window.removeEventListener("mouseleave", handleMouseLeave);
+          canvas.removeEventListener("touchstart", handleTouchStart);
+          canvas.removeEventListener("touchmove", handleTouchMove);
+          canvas.removeEventListener("touchend", handleTouchEnd);
+          canvas.removeEventListener("touchcancel", handleTouchEnd);
+        };
+      }, []);
+
+      return <canvas ref={canvasRef} className="fixed inset-0 -z-20 opacity-70 mix-blend-screen touch-none" style={{ touchAction: 'none' }} />;
+    };
+
+    const App = () => {
+      const [isDark, setIsDark] = useState(true);
+      const [isBooting, setIsBooting] = useState(true);
+      const [bootStep, setBootStep] = useState(0);
+      const [istTime, setIstTime] = useState("");
+      const [istDate, setIstDate] = useState("");
+
+      const scrollToSection = (id) => {
+        const el = document.getElementById(id);
+        if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+      };
+
+      useEffect(() => {
+        const stored = localStorage.getItem("theme");
+        if (stored === "light") {
+          setIsDark(false);
+          document.documentElement.classList.remove("dark");
+        } else {
+          setIsDark(true);
+          document.documentElement.classList.add("dark");
+        }
+      }, []);
+
+      useEffect(() => {
+        if (isDark) {
+          document.documentElement.classList.add("dark");
+          localStorage.setItem("theme", "dark");
+        } else {
+          document.documentElement.classList.remove("dark");
+          localStorage.setItem("theme", "light");
+        }
+      }, [isDark]);
+
+      useEffect(() => {
+        if (!isBooting) return;
+        const t1 = setTimeout(() => setBootStep(1), 500);
+        const t2 = setTimeout(() => setBootStep(2), 1100);
+        const t3 = setTimeout(() => setBootStep(3), 1700);
+        const t4 = setTimeout(() => setIsBooting(false), 2600);
+        return () => [t1, t2, t3, t4].forEach(clearTimeout);
+      }, [isBooting]);
+
+      useEffect(() => {
+        const updateTime = () => {
+          const now = new Date();
+          setIstTime(now.toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false, timeZone: "Asia/Kolkata" }));
+          setIstDate(now.toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric", timeZone: "Asia/Kolkata" }));
+        };
+        updateTime();
+        const interval = setInterval(updateTime, 1000);
+        return () => clearInterval(interval);
+      }, []);
+
+      if (isBooting) {
+        return (
+          <div className="relative min-h-screen overflow-hidden bg-slate-950 text-slate-100">
+            <AnimatedNetworkBackground />
+            <div className="pointer-events-none fixed inset-0 -z-10 opacity-60 mix-blend-screen">
+              <div className="absolute -left-10 top-0 h-72 w-72 rounded-full bg-sky-500/20 blur-3xl" />
+              <div className="absolute right-0 top-40 h-80 w-80 rounded-full bg-purple-600/25 blur-3xl" />
+              <div className="absolute bottom-0 left-1/2 h-64 w-64 -translate-x-1/2 rounded-full bg-emerald-500/15 blur-3xl" />
+            </div>
+            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(15,23,42,0)_0,_rgba(15,23,42,1)_65%)]" />
+            <div className="relative flex min-h-screen flex-col px-4">
+              <div className="flex items-center justify-between pt-4 text-[10px] uppercase tracking-[0.28em] text-slate-500">
+                <span className="hidden sm:inline">ABHINANTH MS • SYSTEM BOOT</span>
+                <span className="sm:hidden">SYSTEM BOOT</span>
+                <span className="hidden sm:inline">Malappuram, Kerala</span>
+              </div>
+              <div className="flex flex-1 flex-col items-center justify-center">
+                <div className="relative w-full max-w-4xl overflow-hidden rounded-2xl border border-sky-500/50 bg-slate-950/90 p-4 sm:p-5 shadow-[0_0_32px_rgba(56,189,248,0.6)]">
+                  <div className="pointer-events-none absolute -right-16 top-1/2 h-64 w-64 -translate-y-1/2 rounded-full border border-sky-500/40 bg-sky-500/5 blur-sm animate-spin-slow hidden md:block" />
+                  <div className="pointer-events-none absolute -right-10 top-1/2 h-40 w-40 -translate-y-1/2 rounded-full border border-purple-500/40 bg-purple-500/10 blur-md hidden md:block" />
+                  <div className="relative grid gap-6 md:grid-cols-[minmax(0,1.4fr)_minmax(0,0.9fr)] md:items-center">
+                    <div>
+                      <p className="font-jjk text-xs uppercase tracking-[0.35em] text-sky-300">呪術 起動 • BOOT SEQUENCE</p>
+                      <div className="mt-4 space-y-2 font-mono text-xs">
+                        <p className={"flex items-center " + (bootStep >= 1 ? "opacity-100 animate-fade-up" : "opacity-0")}>
+                          &gt; Initializing cursed frontend core
+                          {bootStep < 2 && <span className="ml-1 inline-block h-4 w-[1px] bg-sky-300 animate-boot-blink" />}
+                        </p>
+                        <p className={"flex items-center " + (bootStep >= 2 ? "opacity-100 animate-fade-up-delayed" : "opacity-0")}>
+                          &gt; Loading React &amp; Tailwind modules...
+                        </p>
+                        <p className={"flex items-center " + (bootStep >= 3 ? "opacity-100 animate-fade-up-delayed" : "opacity-0")}>
+                          &gt; Binding Jujutsu Kaisen UI theme... <span className="ml-1 text-emerald-400">OK</span>
+                        </p>
+                      </div>
+                      <div className="mt-6 h-1.5 w-full overflow-hidden rounded-full bg-slate-800">
+                        <div className={"h-full w-full rounded-full bg-gradient-to-r from-sky-400 via-purple-500 to-emerald-400 transition-all duration-700 " + (bootStep >= 3 ? "translate-x-0" : "-translate-x-full")} />
+                      </div>
+                      <div className="mt-5 flex items-center justify-between text-[10px] text-slate-500">
+                        <span className="hidden sm:inline">PROFILE: FRONTEND SORCERER LV.19</span>
+                        <span className="sm:hidden">FRONTEND LV.19</span>
+                        <span className="hidden sm:inline">PRESS ENTER TO CONTINUE</span>
+                      </div>
+                      <div className="mt-4 flex justify-end">
+                        <button onClick={() => setIsBooting(false)} className="relative inline-flex items-center justify-center overflow-hidden rounded-full border border-sky-500/70 bg-slate-950/80 px-4 sm:px-6 py-2 text-[10px] font-semibold uppercase tracking-[0.3em] text-sky-200 shadow-[0_0_24px_rgba(56,189,248,0.6)] transition-transform duration-200 hover:-translate-y-0.5 hover:bg-sky-500 hover:text-slate-950 active:scale-95 dark:border-purple-400/80 dark:text-purple-100 dark:hover:bg-purple-500">
+                          Enter Portfolio
+                        </button>
+                      </div>
+                    </div>
+                    <div className="relative hidden h-full items-center justify-center md:flex">
+                      <div className="relative flex h-56 w-40 flex-col items-center justify-center rounded-3xl border border-slate-700/80 bg-slate-950/80 px-4 py-6 shadow-[0_0_26px_rgba(15,23,42,0.9)]">
+                        <p className="font-jjk text-[10px] tracking-[0.4em] text-slate-500">JUJUTSU</p>
+                        <div className="mt-2 flex h-full flex-col items-center justify-center">
+                          <p className="writing-mode-vertical font-jjk text-3xl font-bold tracking-[0.4em] text-sky-300">呪術廻戦</p>
+                          <p className="mt-3 text-[9px] uppercase tracking-[0.35em] text-slate-500">ANIME • THEME</p>
+                        </div>
+                        <p className="mt-3 text-[9px] text-slate-500">Portfolio boot • CURSED UI</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="pb-4 text-center text-[10px] text-slate-600">React + Tailwind • Anime-based portfolio boot screen</div>
+            </div>
+          </div>
+        );
+      }
+
+      return (
+        <div className="min-h-screen bg-slate-950 text-slate-100 dark:bg-slate-950">
+          <AnimatedNetworkBackground />
+          <div className="pointer-events-none fixed inset-0 -z-10 opacity-60 mix-blend-screen">
+            <div className="absolute -left-10 top-0 h-72 w-72 rounded-full bg-sky-500/20 blur-3xl" />
+            <div className="absolute right-0 top-40 h-80 w-80 rounded-full bg-purple-600/25 blur-3xl" />
+            <div className="absolute bottom-0 left-1/2 h-64 w-64 -translate-x-1/2 rounded-full bg-emerald-500/15 blur-3xl" />
+          </div>
+          <div className="fixed right-4 top-1/2 z-30 hidden -translate-y-1/2 flex-col items-center gap-3 md:flex">
+            <div className="rounded-full border border-slate-700 bg-slate-950/80 px-2 py-3 text-[9px] font-jjk uppercase tracking-[0.35em] text-slate-400 shadow-[0_0_18px_rgba(15,23,42,0.9)]">呪術</div>
+            {[["home", "H", "Home"], ["skills", "S", "Skills"], ["projects", "P", "Projects"], ["contact", "C", "Contact"]].map(([id, letter, name]) => (
+              <button key={id} onClick={() => scrollToSection(id)} className={"group relative flex h-9 w-9 items-center justify-center rounded-full border bg-slate-950/80 text-[10px] font-semibold uppercase tracking-[0.2em] transition hover:-translate-y-0.5 active:scale-95 " + (id === "home" ? "border-sky-500/70 text-sky-200 shadow-[0_0_18px_rgba(56,189,248,0.7)] hover:bg-sky-500 hover:text-slate-950" : "border-slate-700 text-slate-300 hover:border-sky-500 hover:text-sky-200 hover:shadow-[0_0_18px_rgba(56,189,248,0.7)]")}>
+                {letter}
+                <span className="pointer-events-none absolute -left-24 rounded-full border border-slate-700 bg-slate-950/90 px-2 py-1 text-[9px] opacity-0 shadow-lg transition group-hover:opacity-100">{name}</span>
+              </button>
+            ))}
+          </div>
+          <div className="fixed inset-x-0 bottom-4 z-30 flex justify-center md:hidden">
+            <div className="flex items-center gap-2 sm:gap-3 rounded-full border border-slate-700 bg-slate-950/90 px-3 sm:px-4 py-2 text-[9px] sm:text-[10px] shadow-[0_0_18px_rgba(15,23,42,0.9)]">
+              {[["home", "Home"], ["skills", "Skills"], ["projects", "Works"], ["contact", "Contact"]].map(([id, name]) => (
+                <button key={id} onClick={() => scrollToSection(id)} className="rounded-full px-2 sm:px-3 py-1 font-semibold uppercase tracking-[0.2em] text-slate-300 transition hover:bg-sky-500 hover:text-slate-950 active:scale-95">{name}</button>
+              ))}
+            </div>
+          </div>
+          <header className="sticky top-0 z-20 border-b border-slate-800/60 bg-slate-950/80 backdrop-blur-xl">
+            <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3">
+              <div className="flex flex-col gap-1">
+                <div className="flex flex-wrap items-baseline gap-x-2 sm:gap-x-4 gap-y-1">
+                  <p className="font-mono text-xs text-sky-300 dark:text-purple-200">IST <span className="mx-1 text-slate-500">•</span>{istTime}</p>
+                  <p className="text-[10px] uppercase tracking-[0.2em] text-slate-400">{istDate}</p>
+                </div>
+                <p className="mt-1 font-jjk text-sm font-semibold tracking-[0.15em] text-sky-300 dark:text-purple-200">ABHINANTH MS</p>
+                <p className="text-[10px] sm:text-xs text-slate-400">Frontend • Anime UI • Cursed Dev</p>
+              </div>
+              <div className="flex items-center gap-2 sm:gap-3">
+                <a href="https://github.com/COD-LUCAS" target="_blank" rel="noreferrer" className="hidden rounded-full border border-slate-700/80 bg-slate-900/80 px-3 py-1 text-xs font-medium text-slate-200 transition hover:-translate-y-0.5 hover:border-sky-400 hover:text-sky-200 hover:shadow-[0_0_18px_rgba(56,189,248,0.5)] md:inline-flex">GitHub</a>
+                <button onClick={() => setIsDark(!isDark)} className="relative inline-flex h-7 w-14 sm:h-8 sm:w-16 items-center rounded-full border border-slate-700 bg-slate-900 px-1 text-xs shadow-md transition hover:border-sky-400 hover:shadow-[0_0_18px_rgba(56,189,248,0.5)]">
+                  <span className={"absolute inline-flex h-5 w-5 sm:h-6 sm:w-6 items-center justify-center rounded-full bg-sky-400 text-[10px] sm:text-[11px] font-bold text-slate-950 transition-transform duration-300 dark:bg-purple-400 " + (isDark ? "translate-x-6 sm:translate-x-7" : "translate-x-0")}>{isDark ? "夜" : "日"}</span>
+                  <span className="ml-2 text-[9px] sm:text-[10px] uppercase tracking-[0.18em] text-slate-400 hidden sm:inline">{isDark ? "Dark" : "Light"}</span>
+                </button>
+              </div>
+            </div>
+          </header>
+          <main className="mx-auto max-w-5xl px-4 pb-20 sm:pb-16 pt-10">
+            <section id="home" className="grid gap-8 sm:gap-10 md:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)] md:items-center">
+              <div>
+                <p className="font-jjk text-[10px] sm:text-xs uppercase tracking-[0.4em] text-sky-300 opacity-0 animate-fade-up dark:text-purple-300">呪術師 • FRONTEND DEV</p>
+                <h1 className="mt-3 font-jjk text-3xl sm:text-4xl md:text-5xl font-bold tracking-widest text-slate-50 opacity-0 animate-fade-up-delayed">ABHINANTH <span className="text-sky-400 dark:text-purple-400">MS</span></h1>
+                <p className="mt-4 text-sm text-slate-300 opacity-0 animate-fade-up-delayed sm:text-base">{getAge()}-year-old frontend developer from <span className="font-semibold text-sky-300">Malappuram, Kerala</span>, crafting anime-inspired web experiences with React and Tailwind CSS.</p>
+                <div className="mt-6 flex flex-wrap items-center gap-3 opacity-0 animate-fade-up-delayed">
+                  <a href="#projects" className="rounded-full bg-sky-500 px-4 sm:px-5 py-2 text-xs sm:text-sm font-semibold text-slate-950 shadow-[0_0_30px_rgba(56,189,248,0.7)] transition-transform duration-200 hover:-translate-y-0.5 hover:bg-sky-400 hover:shadow-[0_0_40px_rgba(56,189,248,0.9)] active:scale-95 dark:bg-purple-500 dark:hover:bg-purple-400 dark:shadow-[0_0_30px_rgba(168,85,247,0.8)]">View Cursed Projects</a>
+                  <a href="https://github.com/COD-LUCAS" target="_blank" rel="noreferrer" className="rounded-full border border-slate-600 bg-slate-900/70 px-4 sm:px-5 py-2 text-xs sm:text-sm font-medium text-slate-200 transition-transform duration-200 hover:-translate-y-0.5 hover:border-sky-400 hover:text-sky-200 hover:shadow-[0_0_20px_rgba(56,189,248,0.6)] active:scale-95">GitHub Profile</a>
+                </div>
+                <div className="mt-6 grid max-w-md grid-cols-3 gap-2 sm:gap-3 text-xs text-slate-300 opacity-0 animate-fade-up-delayed">
+                  <div className="rounded-xl border border-sky-500/60 bg-slate-900/70 p-2 sm:p-3 shadow-[0_0_20px_rgba(56,189,248,0.4)]">
+                    <p className="text-[9px] sm:text-[10px] uppercase tracking-[0.2em] text-sky-300">Age</p>
+                    <p className="mt-1 text-base sm:text-lg font-semibold">{getAge()}</p>
+                    <p className="text-[10px] sm:text-[11px] text-slate-400">Jan 24</p>
+                  </div>
+                  <div className="rounded-xl border border-slate-700 bg-slate-900/70 p-2 sm:p-3">
+                    <p className="text-[9px] sm:text-[10px] uppercase tracking-[0.2em] text-slate-400">Role</p>
+                    <p className="mt-1 text-xs sm:text-sm font-semibold">Frontend Developer</p>
+                    <p className="text-[10px] sm:text-[11px] text-slate-400">React & Tailwind</p>
+                  </div>
+                  <div className="rounded-xl border border-slate-700 bg-slate-900/70 p-2 sm:p-3">
+                    <p className="text-[9px] sm:text-[10px] uppercase tracking-[0.2em] text-slate-400">Location</p>
+                    <p className="mt-1 text-xs sm:text-sm font-semibold">Malappuram</p>
+                    <p className="text-[10px] sm:text-[11px] text-slate-400">Kerala, India</p>
+                  </div>
+                </div>
+              </div>
+              <div className="relative opacity-0 animate-fade-up-delayed">
+                <div className="absolute -inset-0.5 -z-10 rounded-3xl bg-gradient-to-br from-sky-500/40 via-purple-500/40 to-emerald-500/40 opacity-70 blur-2xl" />
+                <div className="relative overflow-hidden rounded-3xl border border-slate-700/80 bg-slate-950/80 p-4 sm:p-5 shadow-2xl">
+                  <div className="flex items-center justify-between">
+                    <p className="font-jjk text-[10px] sm:text-xs uppercase tracking-[0.4em] text-slate-400">呪術カード</p>
+                    <span className="rounded-full bg-sky-500/20 px-2 sm:px-3 py-1 text-[9px] sm:text-[10px] font-semibold uppercase tracking-[0.25em] text-sky-200 dark:bg-purple-500/20 dark:text-purple-100">ACTIVE</span>
+                  </div>
+                  <div className="mt-4">
+                    <p className="text-[10px] sm:text-xs text-slate-400">Current Project</p>
+                    <p className="mt-1 text-base sm:text-lg font-semibold text-slate-50">X-OPTIMUS</p>
+                    <p className="text-[10px] sm:text-[11px] text-slate-400">MULTIFUNCTIONAL TELEGRAM BOT</p>
+                  </div>
+                  <div className="mt-4 grid grid-cols-3 gap-2 text-[10px] text-slate-300">
+                    <div className="rounded-lg border border-slate-700/80 bg-slate-900/80 p-2">
+                      <p className="text-[8px] sm:text-[9px] uppercase tracking-[0.25em] text-slate-500">CURSED</p>
+                      <p className="mt-1 text-[10px] sm:text-xs font-semibold text-sky-300">TELGRAM BOT</p>
+                    </div>
+                    <div className="rounded-lg border border-slate-700/80 bg-slate-900/80 p-2">
+                      <p className="text-[8px] sm:text-[9px] uppercase tracking-[0.25em] text-slate-500">TECH</p>
+                      <p className="mt-1 text-[10px] sm:text-xs font-semibold">Python</p>
+                    </div>
+                    <div className="rounded-lg border border-slate-700/80 bg-slate-900/80 p-2">
+                      <p className="text-[8px] sm:text-[9px] uppercase tracking-[0.25em] text-slate-500">MODE</p>
+                      <p className="mt-1 text-[10px] sm:text-xs font-semibold">multifunction</p>
+                    </div>
+                  </div>
+                  <a href="https://github.com/COD-LUCAS/X-OPTIMUS" target="_blank" rel="noreferrer" className="mt-5 inline-flex w-full items-center justify-center rounded-xl bg-sky-500 px-4 py-2 text-[10px] sm:text-xs font-semibold uppercase tracking-[0.2em] text-slate-950 shadow-[0_0_24px_rgba(56,189,248,0.9)] transition-transform duration-200 hover:-translate-y-0.5 hover:bg-sky-400 hover:shadow-[0_0_26px_rgba(56,189,248,1)] active:scale-95 dark:bg-purple-500 dark:hover:bg-purple-400 dark:shadow-[0_0_26px_rgba(168,85,247,0.9)]">View X-OPTIMUS Repo</a>
+                </div>
+              </div>
+            </section>
+            <SectionDivider label="SKILLS" />
+            <section id="skills">
+              <h2 className="font-jjk text-xl sm:text-2xl font-bold tracking-[0.25em] text-slate-100">技能 • SKILLS</h2>
+              <p className="mt-2 text-sm text-slate-300">Focused on building clean, responsive, anime-inspired UIs with performant frontend stacks Bots.</p>
+              <div className="mt-5 grid gap-3 sm:gap-4 sm:grid-cols-2 md:grid-cols-3">
+                {skills.map((skill) => (
+                  <div key={skill} className="rounded-2xl border border-slate-700 bg-slate-950/80 p-3 sm:p-4 text-sm shadow-[0_0_18px_rgba(15,23,42,0.9)] transition hover:-translate-y-0.5 hover:border-sky-400/80 hover:shadow-[0_0_26px_rgba(56,189,248,0.8)]">
+                    <p className="font-medium text-slate-100">{skill}</p>
+                    <p className="mt-1 text-xs text-slate-400">Cursed mastery level: <span className="text-sky-300 dark:text-purple-300">intermediate</span></p>
+                  </div>
+                ))}
+              </div>
+            </section>
+            <SectionDivider label="PROJECTS" />
+            <section id="projects">
+              <h2 className="font-jjk text-xl sm:text-2xl font-bold tracking-[0.25em] text-slate-100">任務 • PROJECTS</h2>
+              <p className="mt-2 text-sm text-slate-300">Selected works featuring anime-themed and Jujutsu Kaisen–inspired interfaces.</p>
+              <div className="mt-6 grid gap-6 md:grid-cols-2">
+                {projects.map((project) => (
+                  <article key={project.title} className="group relative overflow-hidden rounded-3xl border border-slate-700/90 bg-slate-950/80 p-4 sm:p-5 shadow-xl transition hover:-translate-y-0.5 hover:border-sky-400/90 hover:shadow-[0_0_30px_rgba(56,189,248,0.8)]">
+                    <div className="pointer-events-none absolute inset-0 opacity-0 mix-blend-screen blur-2xl transition group-hover:opacity-60">
+                      <div className="absolute -left-10 top-0 h-32 w-32 rounded-full bg-sky-500/40" />
+                      <div className="absolute right-0 bottom-0 h-32 w-32 rounded-full bg-purple-500/40" />
+                    </div>
+                    <div className="relative">
+                      <div className="flex items-center justify-between gap-2">
+                        <h3 className="font-jjk text-base sm:text-lg font-semibold tracking-[0.2em] text-slate-50">{project.title}</h3>
+                        <span className="rounded-full bg-sky-500/20 px-2 sm:px-3 py-1 text-[9px] sm:text-[10px] font-semibold uppercase tracking-[0.25em] text-sky-200 dark:bg-purple-500/20 dark:text-purple-100">MAIN</span>
+                      </div>
+                      <p className="mt-1 text-[10px] sm:text-xs text-slate-400">{project.subtitle}</p>
+                      <p className="mt-3 text-sm text-slate-200">{project.description}</p>
+                      <div className="mt-4 flex flex-wrap gap-2">
+                        {project.tags.map((tag) => <Tag key={tag}>{tag}</Tag>)}
+                      </div>
+                      <a href={project.link} target="_blank" rel="noreferrer" className="mt-5 inline-flex items-center text-xs font-semibold uppercase tracking-[0.25em] text-sky-300 transition group-hover:translate-x-1 group-hover:text-sky-200">View on GitHub<span className="ml-2 inline-block translate-y-[1px]">↗</span></a>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            </section>
+            <SectionDivider label="CONTACT" />
+
+<section id="contact" className="mb-8">
+  <h2 className="font-jjk text-xl sm:text-2xl font-bold tracking-[0.25em] text-slate-100">
+    連絡 • CONTACT
+  </h2>
+
+  <p className="mt-2 text-slate-200">
+    You can reach me on WhatsApp, Instagram, or GitHub.
+  </p>
+
+  <div className="mt-5 grid gap-4 md:grid-cols-2">
+
+    {/* Primary (Icons Row) */}
+    <div className="rounded-2xl border border-slate-700 bg-slate-950/80 p-4 text-sm">
+      <p className="text-xs uppercase tracking-[0.2em] text-slate-500">Primary</p>
+
+      <div className="mt-4 flex items-center gap-8">
+
+        {/* WhatsApp */}
+        <a
+          href="https://wa.me/918078454082"
+          target="_blank"
+          rel="noreferrer"
+          className="group flex items-center justify-center h-12 w-12 rounded-xl border border-slate-700 bg-slate-900/60 hover:border-sky-400 hover:shadow-[0_0_20px_rgba(56,189,248,0.6)] transition"
+        >
+          <img
+            src="https://img.icons8.com/ios-filled/50/00e676/whatsapp.png"
+            alt="WhatsApp"
+            className="h-6 w-6 opacity-80 group-hover:opacity-100"
+          />
+        </a>
+
+        {/* Instagram */}
+        <a
+          href="https://instagram.com/abhe.nandh"
+          target="_blank"
+          rel="noreferrer"
+          className="group flex items-center justify-center h-12 w-12 rounded-xl border border-slate-700 bg-slate-900/60 hover:border-sky-400 hover:shadow-[0_0_20px_rgba(56,189,248,0.6)] transition"
+        >
+          <img
+            src="https://img.icons8.com/ios-filled/50/e91e63/instagram-new.png"
+            alt="Instagram"
+            className="h-6 w-6 opacity-80 group-hover:opacity-100"
+          />
+        </a>
+
+        {/* GitHub */}
+        <a
+          href="https://github.com/COD-LUCAS"
+          target="_blank"
+          rel="noreferrer"
+          className="group flex items-center justify-center h-12 w-12 rounded-xl border border-slate-700 bg-slate-900/60 hover:border-sky-400 hover:shadow-[0_0_20px_rgba(56,189,248,0.6)] transition"
+        >
+          <img
+            src="https://img.icons8.com/ios-filled/50/ffffff/github.png"
+            alt="GitHub"
+            className="h-6 w-6 opacity-80 group-hover:opacity-100"
+          />
+        </a>
+
+      </div>
+    </div>
+
+    {/* Status */}
+    <div className="rounded-2xl border border-slate-700 bg-slate-950/80 p-4 text-sm">
+      <p className="text-xs uppercase tracking-[0.2em] text-slate-500">Status</p>
+
+      <p className="mt-2 text-slate-200">
+        Currently leveling up frontend skills, learning advanced React patterns,
+        and building more anime-styled interfaces.
+      </p>
+
+      <p className="mt-2 text-xs text-slate-500">
+        "Adapt, overcome, and exorcise bugs like curses."
+      </p>
+    </div>
+
+  </div>
+</section>
+            <footer className="mt-10 border-t border-slate-800 pt-4 text-center text-[10px] sm:text-[11px] text-slate-500">
+              <p>Designed in Jujutsu Kaisen style • Built with React & Tailwind CSS</p>
+              <p className="mt-1 text-[9px] sm:text-[10px]">Portfolio of <span className="text-sky-300">Abhinanth MS</span> • Malappuram, Kerala</p>
+            </footer>
+          </main>
+        </div>
+      );
+    };
+
+    ReactDOM.render(<App />, document.getElementById("root"));
+  </script>
+</body>
+</html>
